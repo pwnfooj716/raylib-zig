@@ -13,12 +13,12 @@ const Program = struct {
 pub fn link(
     b: *std.Build,
     exe: *std.Build.Step.Compile,
-    target: std.zig.CrossTarget,
+    target: std.Build.ResolvedTarget,
     optimize: std.builtin.Mode,
 ) void {
     const lib = getRaylib(b, target, optimize);
 
-    const target_os = exe.target.toTarget().os.tag;
+    const target_os = exe.rootModuleTarget().os.tag;
     switch (target_os) {
         .windows => {
             exe.linkSystemLibrary("winmm");
@@ -60,10 +60,10 @@ pub fn link(
     exe.linkLibrary(lib);
 }
 
-var _raylib_lib_cache: ?*std.build.Step.Compile = null;
+var _raylib_lib_cache: ?*std.Build.Step.Compile = null;
 pub fn getRaylib(
     b: *std.Build,
-    target: std.zig.CrossTarget,
+    target: std.Build.ResolvedTarget,
     optimize: std.builtin.Mode,
 ) *std.Build.Step.Compile {
     if (_raylib_lib_cache) |lib| return lib else {
@@ -84,7 +84,7 @@ pub fn getModule(b: *std.Build, comptime rl_path: []const u8) *std.Build.Module 
     if (b.modules.contains("raylib")) {
         return b.modules.get("raylib").?;
     }
-    return b.addModule("raylib", .{ .source_file = .{ .path = rl_path ++ "/lib/raylib-zig.zig" } });
+    return b.addModule("raylib", .{ .root_source_file = .{ .path = rl_path ++ "/lib/raylib-zig.zig" } });
 }
 
 fn getModuleInternal(b: *std.Build) *std.Build.Module {
@@ -98,8 +98,8 @@ pub const math = struct {
     pub fn getModule(b: *std.Build, comptime rl_path: []const u8) *std.Build.Module {
         const raylib = rl.getModule(b, rl_path);
         return b.addModule("raylib-math", .{
-            .source_file = .{ .path = rl_path ++ "/lib/raylib-zig-math.zig" },
-            .dependencies = &.{.{ .name = "raylib-zig", .module = raylib }},
+            .root_source_file = .{ .path = rl_path ++ "/lib/raylib-zig-math.zig" },
+            .imports = &.{.{ .name = "raylib-zig", .module = raylib }},
         });
     }
 
@@ -246,7 +246,7 @@ pub fn compileForEmscripten(
     b: *std.Build,
     name: []const u8,
     root_source_file: []const u8,
-    target: std.zig.CrossTarget,
+    target: std.Build.ResolvedTarget,
     optimize: std.builtin.Mode,
 ) *std.Build.Step.Compile {
     // TODO: It might be a good idea to create a custom compile step, that does
@@ -254,7 +254,7 @@ pub fn compileForEmscripten(
     // the make function of the step. However it might also be a bad idea since
     // it messes with the build system itself.
 
-    const new_target = updateTargetForWeb(target);
+    const new_target = updateTargetForWeb(b, target);
 
     // The project is built as a library and linked later.
     const exe_lib = b.addStaticLibrary(.{
@@ -342,24 +342,14 @@ fn lastIndexOf(string: []const u8, character: u8) usize {
 }
 // TODO: each zig update, remove this and see if everything still works.
 // https://github.com/ziglang/zig/issues/16776 is where the issue is submitted.
-fn updateTargetForWeb(target: std.zig.CrossTarget) std.zig.CrossTarget {
+fn updateTargetForWeb(b: *std.Build, target: std.Build.ResolvedTarget) std.Build.ResolvedTarget {
     // Zig building to emscripten doesn't work, because the Zig standard library
     // is missing some things in the C system. "std/c.zig" is missing fd_t,
     // which causes compilation to fail. So build to wasi instead, until it gets
     // fixed.
-    return std.zig.CrossTarget{
-        .cpu_arch = target.cpu_arch,
-        .cpu_model = target.cpu_model,
-        .cpu_features_add = target.cpu_features_add,
-        .cpu_features_sub = target.cpu_features_sub,
-        .os_tag = .wasi,
-        .os_version_min = target.os_version_min,
-        .os_version_max = target.os_version_max,
-        .glibc_version = target.glibc_version,
-        .abi = target.abi,
-        .dynamic_linker = target.dynamic_linker,
-        .ofmt = target.ofmt,
-    };
+    var query = target.query;
+    query.os_tag = .wasi;
+    return b.resolveTargetQuery(query);
 }
 const webhack_c =
     \\// Zig adds '__stack_chk_guard', '__stack_chk_fail', and 'errno',
