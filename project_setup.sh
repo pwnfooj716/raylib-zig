@@ -15,13 +15,13 @@ const rl = @import("raylib-zig/build.zig");
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
-    var raylib = rl.getModule(b, "raylib-zig");
-    var raylib_math = rl.math.getModule(b, "raylib-zig");
+    const raylib = rl.getModule(b, "raylib-zig");
+    const raylib_math = rl.math.getModule(b, "raylib-zig");
     //web exports are completely separate
-    if (target.getOsTag() == .emscripten) {
+    if (target.result.os.tag == .emscripten) {
         const exe_lib = rl.compileForEmscripten(b, "'$PROJECT_NAME'", "src/main.zig", target, optimize);
-        exe_lib.addModule("raylib", raylib);
-        exe_lib.addModule("raylib-math", raylib_math);
+        exe_lib.root_module.addImport("raylib", raylib);
+        exe_lib.root_module.addImport("raylib-math", raylib_math);
         const raylib_artifact = rl.getRaylib(b, target, optimize);
         // Note that raylib itself is not actually added to the exe_lib output file, so it also needs to be linked with emscripten.
         exe_lib.linkLibrary(raylib_artifact);
@@ -37,8 +37,8 @@ pub fn build(b: *std.Build) !void {
     const exe = b.addExecutable(.{ .name = "'$PROJECT_NAME'", .root_source_file = .{ .path = "src/main.zig" }, .optimize = optimize, .target = target });
 
     rl.link(b, exe, target, optimize);
-    exe.addModule("raylib", raylib);
-    exe.addModule("raylib-math", raylib_math);
+    exe.root_module.addImport("raylib", raylib);
+    exe.root_module.addImport("raylib-math", raylib_math);
 
     const run_cmd = b.addRunArtifact(exe);
     const run_step = b.step("run", "Run '$PROJECT_NAME'");
