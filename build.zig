@@ -91,7 +91,7 @@ fn getModuleInternal(b: *std.Build) *std.Build.Module {
     if (b.modules.contains("raylib")) {
         return b.modules.get("raylib").?;
     }
-    return b.addModule("raylib", .{ .source_file = .{ .path = "lib/raylib-zig.zig" } });
+    return b.addModule("raylib", .{ .root_source_file = .{ .path = "lib/raylib-zig.zig" } });
 }
 
 pub const math = struct {
@@ -106,8 +106,8 @@ pub const math = struct {
     fn getModuleInternal(b: *std.Build) *std.Build.Module {
         const raylib = rl.getModuleInternal(b);
         return b.addModule("raylib-math", .{
-            .source_file = .{ .path = "lib/raylib-zig-math.zig" },
-            .dependencies = &.{.{ .name = "raylib-zig", .module = raylib }},
+            .root_source_file = .{ .path = "lib/raylib-zig-math.zig" },
+            .imports = &.{.{ .name = "raylib-zig", .module = raylib }},
         });
     }
 };
@@ -185,10 +185,10 @@ pub fn build(b: *std.Build) !void {
     const raylib_math = rl.math.getModuleInternal(b);
 
     for (examples) |ex| {
-        if (target.getOsTag() == .emscripten) {
+        if (target.query.os_tag == .emscripten) {
             const exe_lib = compileForEmscripten(b, ex.name, ex.path, target, optimize);
-            exe_lib.addModule("raylib", raylib);
-            exe_lib.addModule("raylib-math", raylib_math);
+            exe_lib.root_module.addImport("raylib", raylib);
+            exe_lib.root_module.addImport("raylib-math", raylib_math);
             const raylib_lib = getRaylib(b, target, optimize);
 
             // Note that raylib itself isn't actually added to the exe_lib
@@ -210,8 +210,8 @@ pub fn build(b: *std.Build) !void {
                 .target = target,
             });
             rl.link(b, exe, target, optimize);
-            exe.addModule("raylib", raylib);
-            exe.addModule("raylib-math", raylib_math);
+            exe.root_module.addImport("raylib", raylib);
+            exe.root_module.addImport("raylib-math", raylib_math);
             const run_cmd = b.addRunArtifact(exe);
             const run_step = b.step(ex.name, ex.desc);
             run_step.dependOn(&run_cmd.step);
