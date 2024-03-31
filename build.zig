@@ -186,6 +186,12 @@ pub fn build(b: *std.Build) !void {
 
     for (examples) |ex| {
         if (target.result.os.tag == .emscripten) {
+            if (b.sysroot == null) {
+                const emsdk_dir = try std.process.getEnvVarOwned(b.allocator, "EMSDK");
+                const sysroot = b.pathJoin(&.{ emsdk_dir, "upstream", "emscripten" });
+                b.sysroot = sysroot;
+            }
+
             const exe_lib = compileForEmscripten(b, ex.name, ex.path, target, optimize);
             exe_lib.root_module.addImport("raylib", raylib);
             exe_lib.root_module.addImport("raylib-math", raylib_math);
