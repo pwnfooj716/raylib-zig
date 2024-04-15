@@ -3,6 +3,10 @@
 const rl = @This();
 const std = @import("std");
 
+test {
+    std.testing.refAllDeclsRecursive(@This());
+}
+
 pub const RaylibError = error{GenericError};
 
 pub const Vector2 = extern struct {
@@ -1062,17 +1066,20 @@ pub const PixelFormat = enum(c_int) {
     pixelformat_uncompressed_r32 = 8,
     pixelformat_uncompressed_r32g32b32 = 9,
     pixelformat_uncompressed_r32g32b32a32 = 10,
-    pixelformat_compressed_dxt1_rgb = 11,
-    pixelformat_compressed_dxt1_rgba = 12,
-    pixelformat_compressed_dxt3_rgba = 13,
-    pixelformat_compressed_dxt5_rgba = 14,
-    pixelformat_compressed_etc1_rgb = 15,
-    pixelformat_compressed_etc2_rgb = 16,
-    pixelformat_compressed_etc2_eac_rgba = 17,
-    pixelformat_compressed_pvrt_rgb = 18,
-    pixelformat_compressed_pvrt_rgba = 19,
-    pixelformat_compressed_astc_4x4_rgba = 20,
-    pixelformat_compressed_astc_8x8_rgba = 21,
+    pixelformat_uncompressed_r16 = 11,
+    pixelformat_uncompressed_r16g16b16 = 12,
+    pixelformat_uncompressed_r16g16b16a16 = 13,
+    pixelformat_compressed_dxt1_rgb = 14,
+    pixelformat_compressed_dxt1_rgba = 15,
+    pixelformat_compressed_dxt3_rgba = 16,
+    pixelformat_compressed_dxt5_rgba = 17,
+    pixelformat_compressed_etc1_rgb = 18,
+    pixelformat_compressed_etc2_rgb = 19,
+    pixelformat_compressed_etc2_eac_rgba = 20,
+    pixelformat_compressed_pvrt_rgb = 21,
+    pixelformat_compressed_pvrt_rgba = 22,
+    pixelformat_compressed_astc_4x4_rgba = 23,
+    pixelformat_compressed_astc_8x8_rgba = 24,
 };
 
 pub const TextureFilter = enum(c_int) {
@@ -1182,7 +1189,7 @@ pub const MATERIAL_MAP_SPECULAR = MaterialMapIndex.material_map_metalness;
 pub const SHADER_LOC_MAP_DIFFUSE = ShaderLocationIndex.shader_loc_map_albedo;
 pub const SHADER_LOC_MAP_SPECULAR = ShaderLocationIndex.shader_loc_map_metalness;
 
-const cdef = @import("raylib-zig-ext.zig");
+const cdef = @import("raylib-ext.zig");
 
 pub fn setWindowIcons(images: []Image) void {
     cdef.SetWindowIcons(@as([*c]Image, @ptrCast(images)), @as(c_int, @intCast(images.len)));
@@ -1216,7 +1223,7 @@ pub fn loadFileData(fileName: [:0]const u8) ![]u8 {
     var bytesRead: i32 = 0;
     var res: []u8 = undefined;
 
-    const ptr = cdef.LoadFileData(@as([*c]const u8, @ptrCast(fileName)), @as([*c]c_uint, @ptrCast(&bytesRead)));
+    const ptr = cdef.LoadFileData(@as([*c]const u8, @ptrCast(fileName)), @as([*c]c_int, @ptrCast(&bytesRead)));
     if (ptr == 0) return RaylibError.GenericError;
 
     res.ptr = @as([*]u8, @ptrCast(ptr));
@@ -1225,11 +1232,11 @@ pub fn loadFileData(fileName: [:0]const u8) ![]u8 {
 }
 
 pub fn saveFileData(fileName: [:0]const u8, data: []u8) bool {
-    return cdef.SaveFileData(@as([*c]const u8, @ptrCast(fileName)), @as(*anyopaque, @ptrCast(data.ptr)), @as(c_uint, @intCast(data.len)));
+    return cdef.SaveFileData(@as([*c]const u8, @ptrCast(fileName)), @as(*anyopaque, @ptrCast(data.ptr)), @as(c_int, @intCast(data.len)));
 }
 
 pub fn exportDataAsCode(data: []const u8, fileName: [:0]const u8) bool {
-    return cdef.ExportDataAsCode(@as([*c]const u8, @ptrCast(data)), @as(c_uint, @intCast(data.len)), @as([*c]const u8, @ptrCast(fileName)));
+    return cdef.ExportDataAsCode(@as([*c]const u8, @ptrCast(data)), @as(c_int, @intCast(data.len)), @as([*c]const u8, @ptrCast(fileName)));
 }
 
 pub fn compressData(data: []const u8) []u8 {
@@ -1359,7 +1366,7 @@ pub fn loadModelAnimations(fileName: [:0]const u8) ![]ModelAnimation {
     var animCount: i32 = 0;
     var res: []ModelAnimation = undefined;
 
-    const ptr = cdef.LoadModelAnimations(@as([*c]const u8, @ptrCast(fileName)), @as([*c]c_uint, @ptrCast(&animCount)));
+    const ptr = cdef.LoadModelAnimations(@as([*c]const u8, @ptrCast(fileName)), @as([*c]c_int, @ptrCast(&animCount)));
     if (ptr == 0) return RaylibError.GenericError;
 
     res.ptr = @as([*]ModelAnimation, @ptrCast(ptr));
@@ -1368,7 +1375,7 @@ pub fn loadModelAnimations(fileName: [:0]const u8) ![]ModelAnimation {
 }
 
 pub fn unloadModelAnimations(animations: []ModelAnimation) void {
-    cdef.UnloadModelAnimations(@as([*c]ModelAnimation, @ptrCast(animations)), @as(c_uint, @intCast(animations.len)));
+    cdef.UnloadModelAnimations(@as([*c]ModelAnimation, @ptrCast(animations)), @as(c_int, @intCast(animations.len)));
 }
 
 pub fn loadWaveFromMemory(fileType: [:0]const u8, fileData: []const u8) Wave {
@@ -1386,19 +1393,19 @@ pub fn loadMusicStreamFromMemory(fileType: [:0]const u8, data: []const u8) Music
     return cdef.LoadMusicStreamFromMemory(@as([*c]const u8, @ptrCast(fileType)), @as([*c]const u8, @ptrCast(data)), @as(c_int, @intCast(data.len)));
 }
 
-pub fn drawLineStrip(points: []const Vector2, color: Color) void {
+pub fn drawLineStrip(points: []Vector2, color: Color) void {
     cdef.DrawLineStrip(@as([*c]Vector2, @ptrCast(points)), @as(c_int, @intCast(points.len)), color);
 }
 
-pub fn drawTriangleFan(points: []const Vector2, color: Color) void {
+pub fn drawTriangleFan(points: []Vector2, color: Color) void {
     cdef.DrawTriangleFan(@as([*c]Vector2, @ptrCast(points)), @as(c_int, @intCast(points.len)), color);
 }
 
-pub fn drawTriangleStrip(points: []const Vector2, color: Color) void {
+pub fn drawTriangleStrip(points: []Vector2, color: Color) void {
     cdef.DrawTriangleStrip(@as([*c]Vector2, @ptrCast(points)), @as(c_int, @intCast(points.len)), color);
 }
 
-pub fn checkCollisionPointPoly(point: Vector2, points: []const Vector2) bool {
+pub fn checkCollisionPointPoly(point: Vector2, points: []Vector2) bool {
     return cdef.CheckCollisionPointPoly(point, @as([*c]Vector2, @ptrCast(points)), @as(c_int, @intCast(points.len)));
 }
 
@@ -1422,6 +1429,6 @@ pub fn textJoin(textList: [][:0]const u8, delimiter: [:0]const u8) [:0]const u8 
     return std.mem.span(cdef.TextJoin(@as([*c][*c]const u8, @ptrCast(textList)), @as(c_int, @intCast(textList.len)), @as([*c]const u8, @ptrCast(delimiter))));
 }
 
-pub fn drawTriangleStrip3D(points: []const Vector3, color: Color) void {
+pub fn drawTriangleStrip3D(points: []Vector3, color: Color) void {
     cdef.DrawTriangleStrip3D(@as([*c]Vector3, @ptrCast(points)), @as(c_int, @intCast(points.len)), color);
 }
