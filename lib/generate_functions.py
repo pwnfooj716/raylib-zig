@@ -25,6 +25,8 @@ IGNORE_TYPES = [
     "[*c]Color",
     "[*c]GlyphInfo",
     "[*c]c_int",
+    "[*c]c_uint",
+    "[*c][*c]u8",
     "[*c][*c]const u8",
     "[*c]Material",
     "[*c]ModelAnimation",
@@ -53,7 +55,8 @@ def ziggify_type(name: str, t: str) -> str:
         "position", "mesh", "materialCount", "material", "model", "animCount",
         "wave", "v1", "v2", "outAxis", "outAngle", "fileSize",
         "AutomationEventList", "list", "batch", "glInternalFormat", "glFormat",
-        "glType", "mipmaps"
+        "glType", "mipmaps", "active", "scroll", "view", "checked", "mouseCell", 
+        "scrollIndex", "focus", "secretViewActive", "color", "alpha", "colorHsv"
     ]
     multi = [
         "data", "compData", "points", "fileData", "colors", "pixels",
@@ -62,9 +65,12 @@ def ziggify_type(name: str, t: str) -> str:
         "LoadFontData", "LoadCodepoints", "TextSplit", "LoadMaterials",
         "LoadModelAnimations", "LoadWaveSamples", "images",
         "LoadRandomSequence", "sequence", "kernel", "GlyphInfo", "glyphs", "glyphRecs",
-        "matf", "rlGetShaderLocsDefault", "locs"
+        "matf", "rlGetShaderLocsDefault", "locs", "GuiGetIcons", "GuiLoadIcons"
     ]
     string = False
+
+    if name == "text" and t == "[*c][*c]const u8":
+        return "[][:0]const u8"
 
     if t.startswith("[*c]") and name not in single and name not in multi:
         if (t == "[*c]const u8" or t == "[*c]u8") and name not in NO_STRINGS:  # Strings are multis.
@@ -142,6 +148,9 @@ def fix_pointer(name: str, t: str):
 
 
 def fix_enums(arg_name, arg_type, func_name):
+    if func_name.startswith("rl"):
+        return arg_type
+
     # Hacking specific enums in here.
     # Raylib doesn't use the enums but rather the resulting ints.
     if arg_type == "int" or arg_type == "unsigned int":
@@ -152,16 +161,40 @@ def fix_enums(arg_name, arg_type, func_name):
                 arg_type = "GamepadButton"
             else:
                 arg_type = "MouseButton"
-        elif arg_name == "mode" and func_name == "UpdateCamera":
-            arg_type = "CameraMode"
+        elif arg_name == "mode":
+            if func_name == "UpdateCamera":
+                arg_type = "CameraMode"
+            elif func_name == "BeginBlendMode":
+                arg_type = "BlendMode"
         elif arg_name == "gesture":
             arg_type = "Gesture"
-        elif arg_name == "flags" and func_name in [
-                "SetWindowState", "ClearWindowState", "SetConfigFlags"
-        ]:
-            arg_type = "ConfigFlags"
+        elif arg_name == "flags" or arg_name == "flag":
+            if func_name in [
+                    "SetWindowState", "ClearWindowState", "SetConfigFlags", "IsWindowState"
+            ]:
+                arg_type = "ConfigFlags"
+            elif func_name == "SetGesturesEnabled":
+                arg_type = "Gesture"
         elif arg_name == "logLevel":
             arg_type = "TraceLogLevel"
+        elif arg_name == "ty":
+            arg_type = "FontType"
+        elif arg_name == "uniformType":
+            arg_type = "ShaderUniformDataType"
+        elif arg_name == "Cursor":
+            arg_type = "MouseCursor"
+        elif arg_name == "newFormat":
+            arg_type = "PixelFormat"
+        elif arg_name == "layout":
+            arg_type = "CubemapLayout"
+        elif arg_name == "filter" and func_name == "SetTextureFilter":
+            arg_type = "TextureFilter"
+        elif arg_name == "TextureWrap":
+            arg_type = "TextureWrap"
+        elif arg_name == "format":
+            arg_type = "PixelFormat"
+        elif arg_name == "mapType":
+            arg_type = "MaterialMapIndex"
     return arg_type
 
 
@@ -234,6 +267,10 @@ def parse_header(header_name: str, output_file: str, ext_file: str, prefix: str,
         zig_c_arguments = []
         zig_arguments = []
         zig_call_args = []
+        
+        if not arguments:
+            arguments = "void"
+
         for arg in arguments.split(", "):
             if arg == "void":
                 break
@@ -243,10 +280,11 @@ def parse_header(header_name: str, output_file: str, ext_file: str, prefix: str,
             # Everything but the last element (for stuff like "const Vector3").
             arg_type = " ".join(arg.split(" ")[0:-1])
             arg_name = arg.split(" ")[-1]  # Last element should be the name.
-            arg_type = fix_enums(arg_name, arg_type, func_name)
 
             if arg_name == "type":
                 arg_name = "ty"
+
+            arg_type = fix_enums(arg_name, arg_type, func_name)
 
             arg_type = c_to_zig_type(arg_type)
             arg_name, arg_type = fix_pointer(arg_name, arg_type)
@@ -299,6 +337,8 @@ def parse_header(header_name: str, output_file: str, ext_file: str, prefix: str,
             "DrawTriangleFan",
             "DrawTriangleStrip",
             "DrawTriangleStrip3D",
+            "GuiTabBar",
+            "GuiListViewEx"
         ]
 
         if func_name in manual or "FromMemory" in func_name:
@@ -353,4 +393,13 @@ if __name__ == "__main__":
         "preludes/rlgl-prelude.zig",
         "preludes/rlgl-ext-prelude.zig",
         "#if defined(RLGL_IMPLEMENTATION)\n"
+    )
+    parse_header(
+        "raygui.h",
+        "raygui.zig",
+        "raygui-ext.zig",
+        "RAYGUIAPI ",
+        "preludes/raygui-prelude.zig",
+        "preludes/raygui-ext-prelude.zig",
+        "#if defined(RAYGUI_IMPLEMENTATION)\n"
     )

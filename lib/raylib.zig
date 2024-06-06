@@ -3,6 +3,9 @@
 const rl = @This();
 const std = @import("std");
 
+pub const gl = @import("rlgl.zig");
+pub const math = @import("raymath.zig");
+
 test {
     std.testing.refAllDeclsRecursive(@This());
 }
@@ -16,6 +19,126 @@ pub const Vector2 = extern struct {
     pub fn init(x: f32, y: f32) Vector2 {
         return Vector2{ .x = x, .y = y };
     }
+
+    pub fn zero() Vector2 {
+        return math.vector2Zero();
+    }
+
+    pub fn one() Vector2 {
+        return math.vector2One();
+    }
+
+    pub fn add(self: Vector2, v: Vector2) Vector2 {
+        return math.vector2Add(self, v);
+    }
+
+    pub fn addValue(self: Vector2, v: f32) Vector2 {
+        return math.vector2AddValue(self, v);
+    }
+
+    pub fn subtract(self: Vector2, v: Vector2) Vector2 {
+        return math.vector2Subtract(self, v);
+    }
+
+    pub fn subtractValue(self: Vector2, v: f32) Vector2 {
+        return math.vector2SubtractValue(self, v);
+    }
+
+    pub fn length(self: Vector2) f32 {
+        return math.vector2Length(self);
+    }
+
+    pub fn lengthSqr(self: Vector2) f32 {
+        return math.vector2LengthSqr(self);
+    }
+
+    pub fn dotProduct(self: Vector2, v: Vector2) f32 {
+        return math.vector2DotProduct(self, v);
+    }
+
+    pub fn distance(self: Vector2, v: Vector2) f32 {
+        return math.vector2Distance(self, v);
+    }
+
+    pub fn distanceSqr(self: Vector2, v: Vector2) f32 {
+        return math.vector2DistanceSqr(self, v);
+    }
+
+    pub fn angle(self: Vector2, v: Vector2) f32 {
+        return math.vector2Angle(self, v);
+    }
+
+    pub fn lineAngle(self: Vector2, end: Vector2) f32 {
+        return math.vector2LineAngle(self, end);
+    }
+
+    pub fn scale(self: Vector2, scale_: f32) Vector2 {
+        return math.vector2Scale(self, scale_);
+    }
+
+    pub fn multiply(self: Vector2, v2: Vector2) Vector2 {
+        return math.vector2Multiply(self, v2);
+    }
+
+    pub fn negate(self: Vector2) Vector2 {
+        return math.vector2Negate(self);
+    }
+
+    pub fn divide(self: Vector2, v2: Vector2) Vector2 {
+        return math.vector2Divide(self, v2);
+    }
+
+    pub fn normalize(self: Vector2) Vector2 {
+        return math.vector2Normalize(self);
+    }
+
+    pub fn transform(self: Vector2, mat: Matrix) Vector2 {
+        return math.vector2Transform(self, mat);
+    }
+
+    pub fn lerp(self: Vector2, v2: Vector2, amount: f32) Vector2 {
+        return math.vector2Lerp(self, v2, amount);
+    }
+
+    pub fn reflect(self: Vector2, normal: Vector2) Vector2 {
+        return math.vector2Reflect(self, normal);
+    }
+
+    pub fn min(self: Vector2, v2: Vector2) Vector2 {
+        return math.vector2Min(self, v2);
+    }
+
+    pub fn max(self: Vector2, v2: Vector2) Vector2 {
+        return math.vector2Max(self, v2);
+    }
+
+    pub fn rotate(self: Vector2, angle_: f32) Vector2 {
+        return math.vector2Rotate(self, angle_);
+    }
+
+    pub fn moveTowards(self: Vector2, target: Vector2, maxDistance: f32) Vector2 {
+        return math.vector2MoveTowards(self, target, maxDistance);
+    }
+
+    pub fn invert(self: Vector2) Vector2 {
+        return math.vector2Invert(self);
+    }
+
+    pub fn clamp(self: Vector2, min_: Vector2, max_: Vector2) Vector2 {
+        return math.vector2Clamp(self, min_, max_);
+    }
+
+    pub fn clampValue(self: Vector2, min_: f32, max_: f32) Vector2 {
+        return math.vector2ClampValue(self, min_, max_);
+    }
+
+    pub fn equals(self: Vector2, q: Vector2) i32 {
+        return math.vector2Equals(self, q);
+    }
+
+    pub fn refract(self: Vector2, n: Vector2, r: f32) Vector2 {
+        return math.vector2Refract(self, n, r);
+    }
 };
 
 pub const Vector3 = extern struct {
@@ -25,6 +148,162 @@ pub const Vector3 = extern struct {
 
     pub fn init(x: f32, y: f32, z: f32) Vector3 {
         return Vector3{ .x = x, .y = y, .z = z };
+    }
+
+    pub fn zero() Vector3 {
+        return math.vector3Zero();
+    }
+
+    pub fn one() Vector3 {
+        return math.vector3One();
+    }
+
+    pub fn add(self: Vector3, v: Vector3) Vector3 {
+        return math.vector3Add(self, v);
+    }
+
+    pub fn addValue(self: Vector3, add_: f32) Vector3 {
+        return math.vector3AddValue(self, add_);
+    }
+
+    pub fn subtract(self: Vector3, v: Vector3) Vector3 {
+        return math.vector3Subtract(self, v);
+    }
+
+    pub fn subtractValue(self: Vector3, sub: f32) Vector3 {
+        return math.vector3SubtractValue(self, sub);
+    }
+
+    pub fn scale(self: Vector3, scalar: f32) Vector3 {
+        return math.vector3Scale(self, scalar);
+    }
+
+    pub fn multiply(self: Vector3, v: Vector3) Vector3 {
+        return math.vector3Multiply(self, v);
+    }
+
+    pub fn crossProduct(self: Vector3, v: Vector3) Vector3 {
+        return math.vector3CrossProduct(self, v);
+    }
+
+    pub fn perpendicular(self: Vector3) Vector3 {
+        return math.vector3Perpendicular(self);
+    }
+
+    pub fn length(self: Vector3) f32 {
+        return math.vector3Length(self);
+    }
+
+    pub fn lengthSqr(self: Vector3) f32 {
+        return math.vector3LengthSqr(self);
+    }
+
+    pub fn dotProduct(self: Vector3, v: Vector3) f32 {
+        return math.vector3DotProduct(self, v);
+    }
+
+    pub fn distance(self: Vector3, v: Vector3) f32 {
+        return math.vector3Distance(self, v);
+    }
+
+    pub fn distanceSqr(self: Vector3, v: Vector3) f32 {
+        return math.vector3DistanceSqr(self, v);
+    }
+
+    pub fn angle(self: Vector3, v: Vector3) f32 {
+        return math.vector3Angle(self, v);
+    }
+
+    pub fn negate(self: Vector3) Vector3 {
+        return math.vector3Negate(self);
+    }
+
+    pub fn divide(self: Vector3, v: Vector3) Vector3 {
+        return math.vector3Divide(self, v);
+    }
+
+    pub fn normalize(self: Vector3) Vector3 {
+        return math.vector3Normalize(self);
+    }
+
+    pub fn project(self: Vector3, v: Vector3) Vector3 {
+        return math.vector3Project(self, v);
+    }
+
+    pub fn reject(self: Vector3, v: Vector3) Vector3 {
+        return math.vector3Reject(self, v);
+    }
+
+    pub fn orthoNormalize(self: *Vector3, v: *Vector3) void {
+        math.vector3OrthoNormalize(self, v);
+    }
+
+    pub fn transform(self: Vector3, mat: Matrix) Vector3 {
+        return math.vector3Transform(self, mat);
+    }
+
+    pub fn rotateByQuaternion(self: Vector3, q: Quaternion) Vector3 {
+        return math.vector3RotateByQuaternion(self, q);
+    }
+
+    pub fn rotateByAxisAngle(self: Vector3, axis: Vector3, angle_: f32) Vector3 {
+        return math.vector3RotateByAxisAngle(self, axis, angle_);
+    }
+
+    pub fn moveTowards(self: Vector3, target: Vector3, maxDistance: f32) Vector3 {
+        return math.vector3MoveTowards(self, target, maxDistance);
+    }
+
+    pub fn lerp(self: Vector3, v2: Vector3, amount: f32) Vector3 {
+        return math.vector3Lerp(self, v2, amount);
+    }
+
+    pub fn cubicHermite(self: Vector3, tangent1: Vector3, v: Vector3, tangent2: Vector3, amount: f32) Vector3 {
+        return math.vector3CubicHermite(self, tangent1, v, tangent2, amount);
+    }
+
+    pub fn reflect(self: Vector3, normal: Vector3) Vector3 {
+        return math.vector3Reflect(self, normal);
+    }
+
+    pub fn min(self: Vector3, v: Vector3) Vector3 {
+        return math.vector3Min(self, v);
+    }
+
+    pub fn max(self: Vector3, v: Vector3) Vector3 {
+        return math.vector3Max(self, v);
+    }
+
+    pub fn barycenter(p: Vector3, a: Vector3, b: Vector3, c: Vector3) Vector3 {
+        return math.vector3Barycenter(p, a, b, c);
+    }
+
+    pub fn unproject(source: Vector3, projection: Matrix, view: Matrix) Vector3 {
+        return math.vector3Unproject(source, projection, view);
+    }
+
+    pub fn toFloatV(self: Vector3) math.float3 {
+        return math.vector3ToFloatV(self);
+    }
+
+    pub fn invert(self: Vector3) Vector3 {
+        return math.vector3Invert(self);
+    }
+
+    pub fn clamp(self: Vector3, min_: Vector3, max_: Vector3) Vector3 {
+        return math.vector3Clamp(self, min_, max_);
+    }
+
+    pub fn clampValue(self: Vector3, min_: f32, max_: f32) Vector3 {
+        return math.vector3ClampValue(self, min_, max_);
+    }
+
+    pub fn equals(p: Vector3, q: Vector3) i32 {
+        return math.vector3Equals(p, q);
+    }
+
+    pub fn refract(self: Vector3, n: Vector3, r: f32) Vector3 {
+        return math.vector3Refract(self, n, r);
     }
 };
 
@@ -36,6 +315,142 @@ pub const Vector4 = extern struct {
 
     pub fn init(x: f32, y: f32, z: f32, w: f32) Vector4 {
         return Vector4{ .x = x, .y = y, .z = z, .w = w };
+    }
+
+    pub fn zero() Vector4 {
+        return math.vector4Zero();
+    }
+
+    pub fn one() Vector4 {
+        return math.vector4One();
+    }
+
+    pub fn add(self: Vector4, v: Vector4) Vector4 {
+        return math.vector4Add(self, v);
+    }
+
+    pub fn addValue(self: Vector4, add_: f32) Vector4 {
+        return math.vector4AddValue(self, add_);
+    }
+
+    pub fn subtract(self: Vector4, v: Vector4) Vector4 {
+        return math.vector4Subtract(self, v);
+    }
+
+    pub fn subtractValue(self: Vector4, add_: f32) Vector4 {
+        return math.vector4SubtractValue(self, add_);
+    }
+
+    pub fn length(self: Vector4) f32 {
+        return math.vector4Length(self);
+    }
+
+    pub fn lengthSqr(self: Vector4) f32 {
+        return math.vector4LengthSqr(self);
+    }
+
+    pub fn dotProduct(self: Vector4, v: Vector4) f32 {
+        return math.vector4DotProduct(self, v);
+    }
+
+    pub fn distance(self: Vector4, v: Vector4) f32 {
+        return math.vector4Distance(self, v);
+    }
+
+    pub fn distanceSqr(self: Vector4, v: Vector4) f32 {
+        return math.vector4DistanceSqr(self, v);
+    }
+
+    pub fn scale(self: Vector4, scale_: f32) Vector4 {
+        return math.vector4Scale(self, scale_);
+    }
+
+    pub fn multiply(self: Vector4, v: Vector4) Vector4 {
+        return math.vector4Multiply(self, v);
+    }
+
+    pub fn negate(self: Vector4) Vector4 {
+        return math.vector4Negate(self);
+    }
+
+    pub fn divide(self: Vector4, v: Vector4) Vector4 {
+        return math.vector4Divide(self, v);
+    }
+
+    pub fn normalize(self: Vector4) Vector4 {
+        return math.vector4Normalize(self);
+    }
+
+    pub fn min(self: Vector4, v: Vector4) Vector4 {
+        return math.vector4Min(self, v);
+    }
+
+    pub fn max(self: Vector4, v: Vector4) Vector4 {
+        return math.vector4Max(self, v);
+    }
+
+    pub fn lerp(self: Vector4, v: Vector4, amount: f32) Vector4 {
+        return math.vector4Lerp(self, v, amount);
+    }
+
+    pub fn moveTowards(self: Vector4, target: Vector4, maxDistance: f32) Vector4 {
+        return math.vector4MoveTowards(self, target, maxDistance);
+    }
+
+    pub fn invert(self: Vector4) Vector4 {
+        return math.vector4Invert(self);
+    }
+
+    pub fn equals(p: Vector4, q: Vector4) i32 {
+        return math.vector4Equals(p, q);
+    }
+
+    pub fn identity() Quaternion {
+        return math.quaternionIdentity();
+    }
+
+    pub fn nlerp(self: Quaternion, q: Quaternion, amount: f32) Quaternion {
+        return math.quaternionNlerp(self, q, amount);
+    }
+
+    pub fn slerp(self: Quaternion, q: Quaternion, amount: f32) Quaternion {
+        return math.quaternionSlerp(self, q, amount);
+    }
+
+    pub fn cubicHermiteSpline(self: Quaternion, outTangent1: Quaternion, q: Quaternion, inTangent2: Quaternion, t: f32) Quaternion {
+        return math.quaternionCubicHermiteSpline(self, outTangent1, q, inTangent2, t);
+    }
+
+    pub fn fromVector3ToVector3(from: Vector3, to: Vector3) Quaternion {
+        return math.quaternionFromVector3ToVector3(from, to);
+    }
+
+    pub fn fromMatrix(mat: Matrix) Quaternion {
+        return math.quaternionFromMatrix(mat);
+    }
+
+    pub fn toMatrix(self: Quaternion) Matrix {
+        return math.quaternionToMatrix(self);
+    }
+
+    pub fn fromAxisAngle(axis: Vector3, angle: f32) Quaternion {
+        return math.quaternionFromAxisAngle(axis, angle);
+    }
+
+    pub fn toAxisAngle(self: Quaternion, outAxis: *Vector3, outAngle: *f32) void {
+        math.quaternionToAxisAngle(self, outAxis, outAngle);
+    }
+
+    pub fn fromEuler(pitch: f32, yaw: f32, roll: f32) Quaternion {
+        return math.quaternionFromEuler(pitch, yaw, roll);
+    }
+
+    pub fn toEuler(self: Quaternion) Vector3 {
+        return math.quaternionToEuler(self);
+    }
+
+    pub fn transform(self: Quaternion, mat: Matrix) Quaternion {
+        return math.quaternionTransform(self, mat);
     }
 };
 pub const Quaternion = Vector4;
@@ -57,6 +472,90 @@ pub const Matrix = extern struct {
     m7: f32,
     m11: f32,
     m15: f32,
+
+    pub fn determinant(self: Matrix) f32 {
+        return math.matrixDeterminant(self);
+    }
+
+    pub fn trace(self: Matrix) f32 {
+        return math.matrixTrace(self);
+    }
+
+    pub fn transpose(self: Matrix) Matrix {
+        return math.matrixTranspose(self);
+    }
+
+    pub fn invert(self: Matrix) Matrix {
+        return math.matrixInvert(self);
+    }
+
+    pub fn identity() Matrix {
+        return math.matrixIdentity();
+    }
+
+    pub fn add(self: Matrix, right: Matrix) Matrix {
+        return math.matrixAdd(self, right);
+    }
+
+    pub fn subtract(self: Matrix, right: Matrix) Matrix {
+        return math.matrixSubtract(self, right);
+    }
+
+    pub fn multiply(self: Matrix, right: Matrix) Matrix {
+        return math.matrixMultiply(self, right);
+    }
+
+    pub fn translate(x: f32, y: f32, z: f32) Matrix {
+        return math.matrixTranslate(x, y, z);
+    }
+
+    pub fn rotate(axis: Vector3, angle: f32) Matrix {
+        return math.matrixRotate(axis, angle);
+    }
+
+    pub fn rotateX(angle: f32) Matrix {
+        return math.matrixRotateX(angle);
+    }
+
+    pub fn rotateY(angle: f32) Matrix {
+        return math.matrixRotateY(angle);
+    }
+
+    pub fn rotateZ(angle: f32) Matrix {
+        return math.matrixRotateZ(angle);
+    }
+
+    pub fn rotateXYZ(angle: Vector3) Matrix {
+        return math.matrixRotateXYZ(angle);
+    }
+
+    pub fn rotateZYX(angle: Vector3) Matrix {
+        return math.matrixRotateZYX(angle);
+    }
+
+    pub fn scale(x: f32, y: f32, z: f32) Matrix {
+        return math.matrixScale(x, y, z);
+    }
+
+    pub fn frustum(left: f64, right: f64, bottom: f64, top: f64, near: f64, far: f64) Matrix {
+        return math.matrixFrustum(left, right, bottom, top, near, far);
+    }
+
+    pub fn perspective(fovY: f64, aspect: f64, nearPlane: f64, farPlane: f64) Matrix {
+        return math.matrixPerspective(fovY, aspect, nearPlane, farPlane);
+    }
+
+    pub fn ortho(left: f64, right: f64, bottom: f64, top: f64, nearPlane: f64, farPlane: f64) Matrix {
+        return math.matrixOrtho(left, right, bottom, top, nearPlane, farPlane);
+    }
+
+    pub fn lookAt(eye: Vector3, target: Vector3, up: Vector3) Matrix {
+        return math.matrixLookAt(eye, target, up);
+    }
+
+    pub fn toFloatV(self: Matrix) math.float16 {
+        return math.matrixToFloatV(self);
+    }
 };
 
 pub const Color = extern struct {
@@ -173,7 +672,7 @@ pub const Image = extern struct {
     }
 
     pub fn initRaw(fileName: [:0]const u8, width: i32, height: i32, format: PixelFormat, headerSize: i32) Image {
-        return rl.loadImageRaw(fileName, width, height, @intFromEnum(format), headerSize);
+        return rl.loadImageRaw(fileName, width, height, format, headerSize);
     }
 
     pub fn initAnim(fileName: [:0]const u8, frames: *i32) Image {
@@ -244,8 +743,7 @@ pub const Image = extern struct {
         return rl.imageFromImage(self, rec);
     }
 
-    // @todo: use PixelFormat enum for newFormat
-    pub fn setFormat(self: *Image, newFormat: i32) void {
+    pub fn setFormat(self: *Image, newFormat: PixelFormat) void {
         return rl.imageFormat(self, newFormat);
     }
 
@@ -334,7 +832,7 @@ pub const Image = extern struct {
     }
 
     pub fn brightness(self: *Image, b: i32) void {
-        rl.imageColorBrightness(self, @as(c_int, b));
+        rl.imageColorBrightness(self, b);
     }
 
     pub fn replaceColor(self: *Image, color: Color, replace: Color) void {
@@ -429,8 +927,7 @@ pub const Image = extern struct {
         return Texture.fromImage(self);
     }
 
-    // @todo: use CubemapLayout enum for layout
-    pub fn asCubemap(self: Image, layout: i32) Texture {
+    pub fn asCubemap(self: Image, layout: CubemapLayout) Texture {
         return Texture.fromCubemap(self, layout);
     }
 };
@@ -450,7 +947,7 @@ pub const Texture = extern struct {
         return rl.loadTextureFromImage(image);
     }
 
-    pub fn fromCubemap(image: Image, layout: i32) Texture {
+    pub fn fromCubemap(image: Image, layout: CubemapLayout) Texture {
         return rl.loadTextureCubemap(image, layout);
     }
 
@@ -795,24 +1292,51 @@ pub const FilePathList = extern struct {
     paths: [*c][*c]u8,
 };
 
-pub const ConfigFlags = enum(c_int) {
-    flag_fullscreen_mode = 2,
-    flag_window_resizable = 4,
-    flag_window_undecorated = 8,
-    flag_window_transparent = 16,
-    flag_msaa_4x_hint = 32,
-    flag_vsync_hint = 64,
-    flag_window_hidden = 128,
-    flag_window_always_run = 256,
-    flag_window_minimized = 512,
-    flag_window_maximized = 1024,
-    flag_window_unfocused = 2048,
-    flag_window_topmost = 4096,
-    flag_window_highdpi = 8192,
-    flag_window_mouse_passthrough = 16384,
-    flag_borderless_windowed_mode = 32768,
-    flag_interlaced_hint = 65536,
-    _,
+pub const AutomationEvent = extern struct {
+    frame: c_uint,
+    type: c_uint,
+    params: [4]c_int,
+};
+
+pub const AutomationEventList = extern struct {
+    capacity: c_uint,
+    count: c_uint,
+    events: [*c]AutomationEvent
+};
+
+pub const ConfigFlags = packed struct {
+    __reserved: bool = false,
+    fullscreen_mode: bool = false,
+    window_resizable: bool = false,
+    window_undecorated: bool = false,
+    window_transparent: bool = false,
+    msaa_4x_hint: bool = false,
+    vsync_hint: bool = false,
+    window_hidden: bool = false,
+    window_always_run: bool = false,
+    window_minimized: bool = false,
+    window_maximized: bool = false,
+    window_unfocused: bool = false,
+    window_topmost: bool = false,
+    window_highdpi: bool = false,
+    window_mouse_passthrough: bool = false,
+    borderless_windowed_mode: bool = false,
+    interlaced_hint: bool = false,
+    __reserved2: bool = false,
+    __reserved3: bool = false,
+    __reserved4: bool = false,
+    __reserved5: bool = false,
+    __reserved6: bool = false,
+    __reserved7: bool = false,
+    __reserved8: bool = false,
+    __reserved9: bool = false,
+    __reserved10: bool = false,
+    __reserved11: bool = false,
+    __reserved12: bool = false,
+    __reserved13: bool = false,
+    __reserved14: bool = false,
+    __reserved15: bool = false,
+    __reserved16: bool = false,
 };
 
 pub const TraceLogLevel = enum(c_int) {
@@ -1164,21 +1688,10 @@ pub const LoadFileTextCallback = *const fn ([*c]const u8) callconv(.C) [*c]u8;
 pub const SaveFileTextCallback = *const fn ([*c]const u8, [*c]u8) callconv(.C) bool;
 pub const AudioCallback = ?*const fn (?*anyopaque, c_uint) callconv(.C) void;
 
-pub const AutomationEvent = extern struct {
-    frame: c_uint = @import("std").mem.zeroes(c_uint),
-    type: c_uint = @import("std").mem.zeroes(c_uint),
-    params: [4]c_int = @import("std").mem.zeroes([4]c_int),
-};
-pub const AutomationEventList = extern struct {
-    capacity: c_uint = @import("std").mem.zeroes(c_uint),
-    count: c_uint = @import("std").mem.zeroes(c_uint),
-    events: [*c]AutomationEvent = @import("std").mem.zeroes([*c]AutomationEvent),
-};
-
-pub const RAYLIB_VERSION_MAJOR = @as(i32, 4);
-pub const RAYLIB_VERSION_MINOR = @as(i32, 6);
+pub const RAYLIB_VERSION_MAJOR = @as(i32, 5);
+pub const RAYLIB_VERSION_MINOR = @as(i32, 1);
 pub const RAYLIB_VERSION_PATCH = @as(i32, 0);
-pub const RAYLIB_VERSION = "4.6-dev";
+pub const RAYLIB_VERSION = "5.1-dev";
 
 pub const MAX_TOUCH_POINTS = 10;
 pub const MAX_MATERIAL_MAPS = 12;
@@ -1219,7 +1732,7 @@ pub fn loadShaderFromMemory(vsCode: ?[:0]const u8, fsCode: ?[:0]const u8) Shader
     return cdef.LoadShaderFromMemory(vsCodeFinal, fsCodeFinal);
 }
 
-pub fn loadFileData(fileName: [:0]const u8) ![]u8 {
+pub fn loadFileData(fileName: [:0]const u8) RaylibError![]u8 {
     var bytesRead: i32 = 0;
     var res: []u8 = undefined;
 
@@ -1271,11 +1784,15 @@ pub fn decodeDataBase64(data: []const u8) []u8 {
     return res;
 }
 
+pub fn loadImageAnimFromMemory(fileType: [:0]const u8, fileData: []const u8, frames: *i32) Image {
+    return cdef.LoadImageAnimFromMemory(@as([*c]const u8, @ptrCast(fileType)), @as([*c]const u8, @ptrCast(fileData)), @as(c_int, @intCast(fileData.len)), @as([*c]c_int, @ptrCast(frames)));
+}
+
 pub fn loadImageFromMemory(fileType: [:0]const u8, fileData: []const u8) Image {
     return cdef.LoadImageFromMemory(@as([*c]const u8, @ptrCast(fileType)), @as([*c]const u8, @ptrCast(fileData)), @as(c_int, @intCast(fileData.len)));
 }
 
-pub fn loadImageColors(image: Image) ![]Color {
+pub fn loadImageColors(image: Image) RaylibError![]Color {
     var res: []Color = undefined;
 
     const ptr = cdef.LoadImageColors(image);
@@ -1286,7 +1803,7 @@ pub fn loadImageColors(image: Image) ![]Color {
     return res;
 }
 
-pub fn loadImagePalette(image: Image, maxPaletteSize: i32) ![]Color {
+pub fn loadImagePalette(image: Image, maxPaletteSize: i32) RaylibError![]Color {
     var colorCount: i32 = 0;
     var res: []Color = undefined;
 
@@ -1308,10 +1825,10 @@ pub fn loadFontFromMemory(fileType: [:0]const u8, fileData: ?[]const u8, fontSiz
     return cdef.LoadFontFromMemory(@as([*c]const u8, @ptrCast(fileType)), @as([*c]const u8, @ptrCast(fileDataFinal)), @as(c_int, @intCast(fileDataLen)), @as(c_int, fontSize), @as([*c]c_int, @ptrCast(fontChars)), @as(c_int, @intCast(fontChars.len)));
 }
 
-pub fn loadFontData(fileData: []const u8, fontSize: i32, fontChars: []i32, ty: i32) ![]GlyphInfo {
+pub fn loadFontData(fileData: []const u8, fontSize: i32, fontChars: []i32, ty: FontType) RaylibError![]GlyphInfo {
     var res: []GlyphInfo = undefined;
 
-    const ptr = cdef.LoadFontData(@as([*c]const u8, @ptrCast(fileData)), @as(c_int, @intCast(fileData.len)), @as(c_int, fontSize), @as([*c]c_int, @ptrCast(fontChars)), @as(c_int, @intCast(fontChars.len)), @as(c_int, ty));
+    const ptr = cdef.LoadFontData(@as([*c]const u8, @ptrCast(fileData)), @as(c_int, @intCast(fileData.len)), @as(c_int, fontSize), @as([*c]c_int, @ptrCast(fontChars)), @as(c_int, @intCast(fontChars.len)), ty);
     if (ptr == 0) return RaylibError.GenericError;
 
     res.ptr = @as([*]GlyphInfo, @ptrCast(ptr));
@@ -1319,7 +1836,7 @@ pub fn loadFontData(fileData: []const u8, fontSize: i32, fontChars: []i32, ty: i
     return res;
 }
 
-pub fn loadCodepoints(text: [:0]const u8) ![]i32 {
+pub fn loadCodepoints(text: [:0]const u8) RaylibError![]i32 {
     if (@sizeOf(c_int) != @sizeOf(i32)) {
         @compileError("Can't cast pointer to c_int array to i32 because they don't have the same size");
     }
@@ -1350,7 +1867,7 @@ pub fn drawMeshInstanced(mesh: Mesh, material: Material, transforms: []const Mat
     cdef.DrawMeshInstanced(mesh, material, @as([*c]const Matrix, @ptrCast(transforms)), @as(c_int, @intCast(transforms.len)));
 }
 
-pub fn loadMaterials(fileName: [:0]const u8) ![]Material {
+pub fn loadMaterials(fileName: [:0]const u8) RaylibError![]Material {
     var materialCount: i32 = 0;
     var res: []Material = undefined;
 
@@ -1362,7 +1879,7 @@ pub fn loadMaterials(fileName: [:0]const u8) ![]Material {
     return res;
 }
 
-pub fn loadModelAnimations(fileName: [:0]const u8) ![]ModelAnimation {
+pub fn loadModelAnimations(fileName: [:0]const u8) RaylibError![]ModelAnimation {
     var animCount: i32 = 0;
     var res: []ModelAnimation = undefined;
 
@@ -1433,6 +1950,30 @@ pub fn drawTriangleStrip3D(points: []Vector3, color: Color) void {
     cdef.DrawTriangleStrip3D(@as([*c]Vector3, @ptrCast(points)), @as(c_int, @intCast(points.len)), color);
 }
 
+fn alloc(_: *anyopaque, len: usize, _: u8, _: usize) ?[*]u8 {
+    std.debug.assert(len > 0);
+    return @ptrCast(cdef.MemAlloc(@intCast(len)));
+}
+
+fn resize(_: *anyopaque, buf: []u8, _: u8, new_len: usize, _: usize) bool {
+    return (new_len <= buf.len);
+}
+
+fn free(_: *anyopaque, buf: []u8, _: u8, _: usize) void {
+    cdef.MemFree(buf.ptr);
+}
+
+const mem_vtable = std.mem.Allocator.VTable{
+    .alloc = alloc,
+    .resize = resize,
+    .free = free,
+};
+
+pub const mem = std.mem.Allocator{
+    .ptr = undefined,
+    .vtable = &mem_vtable,
+};
+
 pub fn initWindow(width: i32, height: i32, title: [:0]const u8) void {
     cdef.InitWindow(@as(c_int, width), @as(c_int, height), @as([*c]const u8, @ptrCast(title)));
 }
@@ -1473,8 +2014,8 @@ pub fn isWindowResized() bool {
     return cdef.IsWindowResized();
 }
 
-pub fn isWindowState(flag: u32) bool {
-    return cdef.IsWindowState(@as(c_uint, flag));
+pub fn isWindowState(flag: ConfigFlags) bool {
+    return cdef.IsWindowState(flag);
 }
 
 pub fn setWindowState(flags: ConfigFlags) void {
@@ -1689,8 +2230,8 @@ pub fn endShaderMode() void {
     cdef.EndShaderMode();
 }
 
-pub fn beginBlendMode(mode: i32) void {
-    cdef.BeginBlendMode(@as(c_int, mode));
+pub fn beginBlendMode(mode: BlendMode) void {
+    cdef.BeginBlendMode(mode);
 }
 
 pub fn endBlendMode() void {
@@ -1733,12 +2274,12 @@ pub fn getShaderLocationAttrib(shader: Shader, attribName: [:0]const u8) i32 {
     return @as(i32, cdef.GetShaderLocationAttrib(shader, @as([*c]const u8, @ptrCast(attribName))));
 }
 
-pub fn setShaderValue(shader: Shader, locIndex: i32, value: *const anyopaque, uniformType: i32) void {
-    cdef.SetShaderValue(shader, @as(c_int, locIndex), value, @as(c_int, uniformType));
+pub fn setShaderValue(shader: Shader, locIndex: i32, value: *const anyopaque, uniformType: ShaderUniformDataType) void {
+    cdef.SetShaderValue(shader, @as(c_int, locIndex), value, uniformType);
 }
 
-pub fn setShaderValueV(shader: Shader, locIndex: i32, value: *const anyopaque, uniformType: i32, count: i32) void {
-    cdef.SetShaderValueV(shader, @as(c_int, locIndex), value, @as(c_int, uniformType), @as(c_int, count));
+pub fn setShaderValueV(shader: Shader, locIndex: i32, value: *const anyopaque, uniformType: ShaderUniformDataType, count: i32) void {
+    cdef.SetShaderValueV(shader, @as(c_int, locIndex), value, uniformType, @as(c_int, count));
 }
 
 pub fn setShaderValueMatrix(shader: Shader, locIndex: i32, mat: Matrix) void {
@@ -1753,24 +2294,16 @@ pub fn unloadShader(shader: Shader) void {
     cdef.UnloadShader(shader);
 }
 
-pub fn getMouseRay(mousePosition: Vector2, camera: Camera) Ray {
-    return cdef.GetMouseRay(mousePosition, camera);
+pub fn getScreenToWorldRay(position: Vector2, camera: Camera) Ray {
+    return cdef.GetScreenToWorldRay(position, camera);
 }
 
-pub fn getCameraMatrix(camera: Camera) Matrix {
-    return cdef.GetCameraMatrix(camera);
-}
-
-pub fn getCameraMatrix2D(camera: Camera2D) Matrix {
-    return cdef.GetCameraMatrix2D(camera);
+pub fn getScreenToWorldRayEx(position: Vector2, camera: Camera, width: i32, height: i32) Ray {
+    return cdef.GetScreenToWorldRayEx(position, camera, @as(c_int, width), @as(c_int, height));
 }
 
 pub fn getWorldToScreen(position: Vector3, camera: Camera) Vector2 {
     return cdef.GetWorldToScreen(position, camera);
-}
-
-pub fn getScreenToWorld2D(position: Vector2, camera: Camera2D) Vector2 {
-    return cdef.GetScreenToWorld2D(position, camera);
 }
 
 pub fn getWorldToScreenEx(position: Vector3, camera: Camera, width: i32, height: i32) Vector2 {
@@ -1779,6 +2312,18 @@ pub fn getWorldToScreenEx(position: Vector3, camera: Camera, width: i32, height:
 
 pub fn getWorldToScreen2D(position: Vector2, camera: Camera2D) Vector2 {
     return cdef.GetWorldToScreen2D(position, camera);
+}
+
+pub fn getScreenToWorld2D(position: Vector2, camera: Camera2D) Vector2 {
+    return cdef.GetScreenToWorld2D(position, camera);
+}
+
+pub fn getCameraMatrix(camera: Camera) Matrix {
+    return cdef.GetCameraMatrix(camera);
+}
+
+pub fn getCameraMatrix2D(camera: Camera2D) Matrix {
+    return cdef.GetCameraMatrix2D(camera);
 }
 
 pub fn setTargetFPS(fps: i32) void {
@@ -1937,6 +2482,10 @@ pub fn isPathFile(path: [:0]const u8) bool {
     return cdef.IsPathFile(@as([*c]const u8, @ptrCast(path)));
 }
 
+pub fn isFileNameValid(fileName: [:0]const u8) bool {
+    return cdef.IsFileNameValid(@as([*c]const u8, @ptrCast(fileName)));
+}
+
 pub fn loadDirectoryFiles(dirPath: [:0]const u8) FilePathList {
     return cdef.LoadDirectoryFiles(@as([*c]const u8, @ptrCast(dirPath)));
 }
@@ -1969,8 +2518,8 @@ pub fn loadAutomationEventList(fileName: [:0]const u8) AutomationEventList {
     return cdef.LoadAutomationEventList(@as([*c]const u8, @ptrCast(fileName)));
 }
 
-pub fn unloadAutomationEventList(list: *AutomationEventList) void {
-    cdef.UnloadAutomationEventList(@as([*c]AutomationEventList, @ptrCast(list)));
+pub fn unloadAutomationEventList(list: AutomationEventList) void {
+    cdef.UnloadAutomationEventList(list);
 }
 
 pub fn exportAutomationEventList(list: AutomationEventList, fileName: [:0]const u8) bool {
@@ -2069,6 +2618,10 @@ pub fn setGamepadMappings(mappings: [:0]const u8) i32 {
     return @as(i32, cdef.SetGamepadMappings(@as([*c]const u8, @ptrCast(mappings))));
 }
 
+pub fn setGamepadVibration(gamepad: i32, leftMotor: f32, rightMotor: f32) void {
+    cdef.SetGamepadVibration(@as(c_int, gamepad), leftMotor, rightMotor);
+}
+
 pub fn isMouseButtonPressed(button: MouseButton) bool {
     return cdef.IsMouseButtonPressed(button);
 }
@@ -2145,8 +2698,8 @@ pub fn getTouchPointCount() i32 {
     return @as(i32, cdef.GetTouchPointCount());
 }
 
-pub fn setGesturesEnabled(flags: u32) void {
-    cdef.SetGesturesEnabled(@as(c_uint, flags));
+pub fn setGesturesEnabled(flags: Gesture) void {
+    cdef.SetGesturesEnabled(flags);
 }
 
 pub fn isGestureDetected(gesture: Gesture) bool {
@@ -2187,6 +2740,14 @@ pub fn updateCameraPro(camera: *Camera, movement: Vector3, rotation: Vector3, zo
 
 pub fn setShapesTexture(texture: Texture2D, source: Rectangle) void {
     cdef.SetShapesTexture(texture, source);
+}
+
+pub fn getShapesTexture() Texture2D {
+    return cdef.GetShapesTexture();
+}
+
+pub fn getShapesTextureRectangle() Rectangle {
+    return cdef.GetShapesTextureRectangle();
 }
 
 pub fn drawPixel(posX: i32, posY: i32, color: Color) void {
@@ -2297,8 +2858,12 @@ pub fn drawRectangleRounded(rec: Rectangle, roundness: f32, segments: i32, color
     cdef.DrawRectangleRounded(rec, roundness, @as(c_int, segments), color);
 }
 
-pub fn drawRectangleRoundedLines(rec: Rectangle, roundness: f32, segments: i32, lineThick: f32, color: Color) void {
-    cdef.DrawRectangleRoundedLines(rec, roundness, @as(c_int, segments), lineThick, color);
+pub fn drawRectangleRoundedLines(rec: Rectangle, roundness: f32, segments: i32, color: Color) void {
+    cdef.DrawRectangleRoundedLines(rec, roundness, @as(c_int, segments), color);
+}
+
+pub fn drawRectangleRoundedLinesEx(rec: Rectangle, roundness: f32, segments: i32, lineThick: f32, color: Color) void {
+    cdef.DrawRectangleRoundedLinesEx(rec, roundness, @as(c_int, segments), lineThick, color);
 }
 
 pub fn drawTriangle(v1: Vector2, v2: Vector2, v3: Vector2, color: Color) void {
@@ -2413,6 +2978,10 @@ pub fn checkCollisionPointLine(point: Vector2, p1: Vector2, p2: Vector2, thresho
     return cdef.CheckCollisionPointLine(point, p1, p2, @as(c_int, threshold));
 }
 
+pub fn checkCollisionCircleLine(center: Vector2, radius: f32, p1: Vector2, p2: Vector2) bool {
+    return cdef.CheckCollisionCircleLine(center, radius, p1, p2);
+}
+
 pub fn getCollisionRec(rec1: Rectangle, rec2: Rectangle) Rectangle {
     return cdef.GetCollisionRec(rec1, rec2);
 }
@@ -2421,8 +2990,8 @@ pub fn loadImage(fileName: [:0]const u8) Image {
     return cdef.LoadImage(@as([*c]const u8, @ptrCast(fileName)));
 }
 
-pub fn loadImageRaw(fileName: [:0]const u8, width: i32, height: i32, format: i32, headerSize: i32) Image {
-    return cdef.LoadImageRaw(@as([*c]const u8, @ptrCast(fileName)), @as(c_int, width), @as(c_int, height), @as(c_int, format), @as(c_int, headerSize));
+pub fn loadImageRaw(fileName: [:0]const u8, width: i32, height: i32, format: PixelFormat, headerSize: i32) Image {
+    return cdef.LoadImageRaw(@as([*c]const u8, @ptrCast(fileName)), @as(c_int, width), @as(c_int, height), format, @as(c_int, headerSize));
 }
 
 pub fn loadImageSvg(fileNameOrString: [:0]const u8, width: i32, height: i32) Image {
@@ -2513,8 +3082,8 @@ pub fn imageTextEx(font: Font, text: [:0]const u8, fontSize: f32, spacing: f32, 
     return cdef.ImageTextEx(font, @as([*c]const u8, @ptrCast(text)), fontSize, spacing, tint);
 }
 
-pub fn imageFormat(image: *Image, newFormat: i32) void {
-    cdef.ImageFormat(@as([*c]Image, @ptrCast(image)), @as(c_int, newFormat));
+pub fn imageFormat(image: *Image, newFormat: PixelFormat) void {
+    cdef.ImageFormat(@as([*c]Image, @ptrCast(image)), newFormat);
 }
 
 pub fn imageToPOT(image: *Image, fill: Color) void {
@@ -2543,6 +3112,10 @@ pub fn imageAlphaPremultiply(image: *Image) void {
 
 pub fn imageBlurGaussian(image: *Image, blurSize: i32) void {
     cdef.ImageBlurGaussian(@as([*c]Image, @ptrCast(image)), @as(c_int, blurSize));
+}
+
+pub fn imageKernelConvolution(image: *Image, kernel: []f32, kernelSize: i32) void {
+    cdef.ImageKernelConvolution(@as([*c]Image, @ptrCast(image)), @as([*c]f32, @ptrCast(kernel)), @as(c_int, kernelSize));
 }
 
 pub fn imageResize(image: *Image, newWidth: i32, newHeight: i32) void {
@@ -2697,8 +3270,8 @@ pub fn loadTextureFromImage(image: Image) Texture2D {
     return cdef.LoadTextureFromImage(image);
 }
 
-pub fn loadTextureCubemap(image: Image, layout: i32) TextureCubemap {
-    return cdef.LoadTextureCubemap(image, @as(c_int, layout));
+pub fn loadTextureCubemap(image: Image, layout: CubemapLayout) TextureCubemap {
+    return cdef.LoadTextureCubemap(image, layout);
 }
 
 pub fn loadRenderTexture(width: i32, height: i32) RenderTexture2D {
@@ -2733,8 +3306,8 @@ pub fn genTextureMipmaps(texture: *Texture2D) void {
     cdef.GenTextureMipmaps(@as([*c]Texture2D, @ptrCast(texture)));
 }
 
-pub fn setTextureFilter(texture: Texture2D, filter: i32) void {
-    cdef.SetTextureFilter(texture, @as(c_int, filter));
+pub fn setTextureFilter(texture: Texture2D, filter: TextureFilter) void {
+    cdef.SetTextureFilter(texture, filter);
 }
 
 pub fn setTextureWrap(texture: Texture2D, wrap: i32) void {
@@ -2763,6 +3336,10 @@ pub fn drawTexturePro(texture: Texture2D, source: Rectangle, dest: Rectangle, or
 
 pub fn drawTextureNPatch(texture: Texture2D, nPatchInfo: NPatchInfo, dest: Rectangle, origin: Vector2, rotation: f32, tint: Color) void {
     cdef.DrawTextureNPatch(texture, nPatchInfo, dest, origin, rotation, tint);
+}
+
+pub fn colorIsEqual(col1: Color, col2: Color) bool {
+    return cdef.ColorIsEqual(col1, col2);
 }
 
 pub fn fade(color: Color, alpha: f32) Color {
@@ -2813,16 +3390,16 @@ pub fn getColor(hexValue: u32) Color {
     return cdef.GetColor(@as(c_uint, hexValue));
 }
 
-pub fn getPixelColor(srcPtr: *anyopaque, format: i32) Color {
-    return cdef.GetPixelColor(srcPtr, @as(c_int, format));
+pub fn getPixelColor(srcPtr: *anyopaque, format: PixelFormat) Color {
+    return cdef.GetPixelColor(srcPtr, format);
 }
 
-pub fn setPixelColor(dstPtr: *anyopaque, color: Color, format: i32) void {
-    cdef.SetPixelColor(dstPtr, color, @as(c_int, format));
+pub fn setPixelColor(dstPtr: *anyopaque, color: Color, format: PixelFormat) void {
+    cdef.SetPixelColor(dstPtr, color, format);
 }
 
-pub fn getPixelDataSize(width: i32, height: i32, format: i32) i32 {
-    return @as(i32, cdef.GetPixelDataSize(@as(c_int, width), @as(c_int, height), @as(c_int, format)));
+pub fn getPixelDataSize(width: i32, height: i32, format: PixelFormat) i32 {
+    return @as(i32, cdef.GetPixelDataSize(@as(c_int, width), @as(c_int, height), format));
 }
 
 pub fn getFontDefault() Font {
@@ -2937,8 +3514,8 @@ pub fn textSubtext(text: [:0]const u8, position: i32, length: i32) [:0]const u8 
     return std.mem.span(cdef.TextSubtext(@as([*c]const u8, @ptrCast(text)), @as(c_int, position), @as(c_int, length)));
 }
 
-pub fn textReplace(text: [:0]u8, replace: [:0]const u8, by: [:0]const u8) [:0]u8 {
-    return std.mem.span(cdef.TextReplace(@as([*c]u8, @ptrCast(text)), @as([*c]const u8, @ptrCast(replace)), @as([*c]const u8, @ptrCast(by))));
+pub fn textReplace(text: [:0]const u8, replace: [:0]const u8, by: [:0]const u8) [:0]u8 {
+    return std.mem.span(cdef.TextReplace(@as([*c]const u8, @ptrCast(text)), @as([*c]const u8, @ptrCast(replace)), @as([*c]const u8, @ptrCast(by))));
 }
 
 pub fn textInsert(text: [:0]const u8, insert: [:0]const u8, position: i32) [:0]u8 {
@@ -2965,8 +3542,20 @@ pub fn textToPascal(text: [:0]const u8) [:0]const u8 {
     return std.mem.span(cdef.TextToPascal(@as([*c]const u8, @ptrCast(text))));
 }
 
+pub fn textToSnake(text: [:0]const u8) [:0]const u8 {
+    return std.mem.span(cdef.TextToSnake(@as([*c]const u8, @ptrCast(text))));
+}
+
+pub fn textToCamel(text: [:0]const u8) [:0]const u8 {
+    return std.mem.span(cdef.TextToCamel(@as([*c]const u8, @ptrCast(text))));
+}
+
 pub fn textToInteger(text: [:0]const u8) i32 {
     return @as(i32, cdef.TextToInteger(@as([*c]const u8, @ptrCast(text))));
+}
+
+pub fn textToFloat(text: [:0]const u8) f32 {
+    return cdef.TextToFloat(@as([*c]const u8, @ptrCast(text)));
 }
 
 pub fn drawLine3D(startPos: Vector3, endPos: Vector3, color: Color) void {
@@ -3117,16 +3706,20 @@ pub fn drawMesh(mesh: Mesh, material: Material, transform: Matrix) void {
     cdef.DrawMesh(mesh, material, transform);
 }
 
-pub fn exportMesh(mesh: Mesh, fileName: [:0]const u8) bool {
-    return cdef.ExportMesh(mesh, @as([*c]const u8, @ptrCast(fileName)));
-}
-
 pub fn getMeshBoundingBox(mesh: Mesh) BoundingBox {
     return cdef.GetMeshBoundingBox(mesh);
 }
 
 pub fn genMeshTangents(mesh: *Mesh) void {
     cdef.GenMeshTangents(@as([*c]Mesh, @ptrCast(mesh)));
+}
+
+pub fn exportMesh(mesh: Mesh, fileName: [:0]const u8) bool {
+    return cdef.ExportMesh(mesh, @as([*c]const u8, @ptrCast(fileName)));
+}
+
+pub fn exportMeshAsCode(mesh: Mesh, fileName: [:0]const u8) bool {
+    return cdef.ExportMeshAsCode(mesh, @as([*c]const u8, @ptrCast(fileName)));
 }
 
 pub fn genMeshPoly(sides: i32, radius: f32) Mesh {
@@ -3185,8 +3778,8 @@ pub fn unloadMaterial(material: Material) void {
     cdef.UnloadMaterial(material);
 }
 
-pub fn setMaterialTexture(material: *Material, mapType: i32, texture: Texture2D) void {
-    cdef.SetMaterialTexture(@as([*c]Material, @ptrCast(material)), @as(c_int, mapType), texture);
+pub fn setMaterialTexture(material: *Material, mapType: MaterialMapIndex, texture: Texture2D) void {
+    cdef.SetMaterialTexture(@as([*c]Material, @ptrCast(material)), mapType, texture);
 }
 
 pub fn setModelMeshMaterial(model: *Model, meshId: i32, materialId: i32) void {
@@ -3341,8 +3934,8 @@ pub fn waveCopy(wave: Wave) Wave {
     return cdef.WaveCopy(wave);
 }
 
-pub fn waveCrop(wave: *Wave, initSample: i32, finalSample: i32) void {
-    cdef.WaveCrop(@as([*c]Wave, @ptrCast(wave)), @as(c_int, initSample), @as(c_int, finalSample));
+pub fn waveCrop(wave: *Wave, initFrame: i32, finalFrame: i32) void {
+    cdef.WaveCrop(@as([*c]Wave, @ptrCast(wave)), @as(c_int, initFrame), @as(c_int, finalFrame));
 }
 
 pub fn waveFormat(wave: *Wave, sampleRate: i32, sampleSize: i32, channels: i32) void {

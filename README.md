@@ -4,7 +4,7 @@
 
 Manually tweaked, auto-generated [raylib](https://github.com/raysan5/raylib) bindings for zig.
 
-Bindings tested on raylib version 5.0 and Zig 0.11.0/0.12.0-dev.1849+bb0f7d55e
+Bindings tested on raylib version 5.1-dev and Zig 0.12.0
 
 Thanks to all the [contributors](https://github.com/Not-Nik/raylib-zig/graphs/contributors) for their help with this binding.
 
@@ -83,8 +83,7 @@ const raylib_dep = b.dependency("raylib-zig", .{
 });
 
 const raylib = raylib_dep.module("raylib"); // main raylib module
-const raylib_math = raylib_dep.module("raylib-math"); // raymath module
-const rlgl = raylib_dep.module("rlgl"); // rlgl module
+const raygui = raylib_dep.module("raygui"); // raygui module
 const raylib_artifact = raylib_dep.artifact("raylib"); // raylib C library
 ```
 
@@ -92,12 +91,11 @@ Now add the modules and artifact to your target as you would normally:
 
 ```zig
 exe.linkLibrary(raylib_artifact);
-exe.addModule("raylib", raylib);
-exe.addModule("raylib-math", raylib_math);
-exe.addModule("rlgl", raylib_math);
+exe.root_module.addImport("raylib", raylib);
+exe.root_module.addImport("raygui", raygui);
 ```
 
-If you additionally want to support Web as a platform with emscripten, you will need `emcc.zig`. Refer to raylib-zig's project template on how to use it
+If you additionally want to support Web as a platform with emscripten, you will need to use `emcc.zig` by importing raylib-zig's build script with `const rlz = @import("raylib-zig");` and then accessing its functions with `rlz.emcc`. Refer to raylib-zig's project template on how to use them.
 
 ## Exporting for web
 To export your project for the web, first install emsdk.

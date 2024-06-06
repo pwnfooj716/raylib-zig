@@ -37,13 +37,13 @@ pub fn compileForEmscripten(
     // the make function of the step. However it might also be a bad idea since
     // it messes with the build system itself.
 
-    const new_target = updateTargetForWeb(b, target);
+    //const new_target = updateTargetForWeb(target);
 
     // The project is built as a library and linked later.
     const exe_lib = b.addStaticLibrary(.{
         .name = name,
-        .root_source_file = .{ .path = root_source_file },
-        .target = new_target,
+        .root_source_file = b.path(root_source_file),
+        .target = target,
         .optimize = optimize,
     });
 
@@ -123,17 +123,7 @@ fn lastIndexOf(string: []const u8, character: u8) usize {
     }
     return string.len - 1;
 }
-// TODO: each zig update, remove this and see if everything still works.
-// https://github.com/ziglang/zig/issues/16776 is where the issue is submitted.
-fn updateTargetForWeb(b: *std.Build, target: std.Build.ResolvedTarget) std.Build.ResolvedTarget {
-    // Zig building to emscripten doesn't work, because the Zig standard library
-    // is missing some things in the C system. "std/c.zig" is missing fd_t,
-    // which causes compilation to fail. So build to wasi instead, until it gets
-    // fixed.
-    var query = target.query;
-    query.os_tag = .wasi;
-    return b.resolveTargetQuery(query);
-}
+
 const webhack_c =
     \\// Zig adds '__stack_chk_guard', '__stack_chk_fail', and 'errno',
     \\// which emscripten doesn't actually support.
